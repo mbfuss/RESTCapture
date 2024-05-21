@@ -22,16 +22,16 @@ public class CaptureService {
     public byte[] getExtractPdf(String ogrn) throws JsonProcessingException, InterruptedException {
         // Выполняем POST-запрос, чтобы получить первый токен
         String firstToken = getTokenFromPostRequest(ogrn);
-        System.out.println("!ТОКЕН 1: " + firstToken);
+//        System.out.println("!ТОКЕН 1: " + firstToken);
 
         // Выполняем GET-запрос на URL результата поиска и получаем новый токен
         String searchResultUrl = "https://egrul.nalog.ru/search-result/" + firstToken;
         String searchResultResponseBody = restTemplate.getForObject(searchResultUrl, String.class);
-        System.out.println(searchResultResponseBody);
+//        System.out.println(searchResultResponseBody);
 
         // Извлекаем значение "t" из второго ответа JSON
         String secondToken = extractTokenFromSearchResult(searchResultResponseBody);
-        System.out.println("!ТОКЕН 2: " + secondToken);
+//        System.out.println("!ТОКЕН 2: " + secondToken);
 
         // Выполняем GET-запросы с новым токеном
         performGetRequestWithDelay("https://egrul.nalog.ru/vyp-status/" + secondToken);
@@ -47,7 +47,7 @@ public class CaptureService {
         jsonToSend.put("query", ogrn);
         HttpEntity<Map<String, String>> request = new HttpEntity<>(jsonToSend);
         String response = restTemplate.postForObject(url, request, String.class);
-        System.out.println(response);
+//        System.out.println(response);
         return extractTokenFromResponse(response);
     }
 
@@ -65,7 +65,7 @@ public class CaptureService {
 
     private void performGetRequestWithDelay(String url) throws InterruptedException {
         String response = restTemplate.getForObject(url, String.class);
-        System.out.println(response);
+//        System.out.println(response);
         Thread.sleep(500);
     }
 }
